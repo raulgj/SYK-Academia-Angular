@@ -95,3 +95,26 @@ div.gallery {
     padding: 15px;
     text-align: center;
   }
+
+
+
+form {
+    padding: 20px;
+}
+
+form ul{
+    list-style-type: none;
+}
+
+form li{
+    padding: 10px;
+}
+
+form li label{
+    width: 100%;
+    display: inline-block;
+}
+
+.labelNoChange{
+    width: 150px !important;
+}
