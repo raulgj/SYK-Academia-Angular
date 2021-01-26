@@ -118,3 +118,19 @@ form li label{
 .labelNoChange{
     width: 150px !important;
 }
+
+
+
+@media only screen and (max-width: 600px) {   
+    .characters img{
+        display: inline-block;
+        vertical-align: middle;
+        width: 22%;
+    }
+
+    .characters div{
+        vertical-align: top;
+        display: inline-block;
+        width: 75%;
+    }
+}
