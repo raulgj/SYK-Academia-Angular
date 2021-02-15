@@ -1,0 +1,34 @@
+<h1>Users</h1>
+<div class="container">
+  <div class="d-flex justify-content-end">
+    <button (click)="newUser()" type="button" class="btn btn btn-primary"><i class="bi bi-person-plus-fill"></i> Nuevo</button>
+  </div>
+  <table class="table table-striped table-hover">
+    <thead class="table-light">
+      <th>Usuario</th>
+      <th>Nombre</th>
+      <th>Apellido paterno</th>
+      <th>Apellido materno</th>
+      <th>Fecha de nacimeinto</th>
+      <th>Genero</th>
+      <th>Activo</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of this.users | async">
+        <td>{{user.user}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.lastName}}</td>
+        <td>{{user.lastNameMother}}</td>
+        <td>{{user.birthdate}}</td>
+        <td>{{user.gender}}</td>
+        <td>{{user.isActive}}</td>
+        <td class="d-flex justify-content-center">
+          <button (click)="deleteUser(user.userId)" type="button" class="btn btn-outline-primary"><i class="bi bi-trash-fill"></i> Borrar</button>
+          &nbsp;
+          <button (click)="editUser(user.userId)" type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill"></i> Editar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
