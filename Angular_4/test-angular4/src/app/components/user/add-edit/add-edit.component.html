@@ -1,0 +1,10 @@
+<h2>{{title}}</h2>
+<form class="row g-3" [formGroup]="addEditForm">
+    <div class="col-md-12">
+        <label for="user" class="form-label">Usuario</label>
+        <input type="text" class="form-control" id="user" name="user" formControlName="user" />
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+</form>
