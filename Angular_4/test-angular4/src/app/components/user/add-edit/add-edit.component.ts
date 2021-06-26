@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IUser } from 'src/app/interface/iuser';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { IEmails, IUser, GenderType } from 'src/app/interface/iuser';
 import { UserService } from 'src/app/services/user.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-edit',
@@ -10,11 +13,11 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./add-edit.component.css']
 })
 export class AddEditComponent implements OnInit {
-  public addEditForm: FormGroup;
+  public formUserInfo: FormGroup;
   public userId: number;
   public title: string;
-  //public genderTypes : Array<any> = Global.genderTypes;
-  public user = {} as IUser;
+  public user: Observable<IUser>;
+  public userDate: Date;
 
   constructor(
     private _formBuilder: FormBuilder, 
@@ -25,65 +28,56 @@ export class AddEditComponent implements OnInit {
     this.userId = this._route.snapshot.params['userId'];
     this.title = (this.userId) ? "Modificar Usuario" : "Nuevo Usuario";
 
-    this.addEditForm = this._formBuilder.group({
-      userId: [this.userId],
-      user: [usr.user, Validators.required],
-      //password: [usr.password, Validators.required],
-      //name: [usr.name, Validators.required],
-      //lastName: [usr.lastName, Validators.required],
-      //lastNameMother: [usr.lastNameMother, Validators.required], 
-      //birthdate: [usr.birthdate, Validators.required],
-      //gender: [usr.gender, Validators.required],
-      //isActive: [usr.isActive, Validators.required], 
-      //temails: this._formBuilder.array(this.createFormEmail(usr.temails))
+    this.formUserInfo = this._formBuilder.group({
+      userId:         [-1],
+      user:           ['',                    Validators.required],
+      password:       ['',                    Validators.required],
+      name:           ['',                    Validators.required],
+      lastName:       ['',                    Validators.required],
+      lastNameMother: ['',                    Validators.required], 
+      birthdate:      [new Date(),            Validators.required]/*,
+      gender:         [GenderType.Masculino,  Validators.required],
+      isActive:       ['1',                   Validators.required]*/
     });
-
   }
 
   ngOnInit(): void {
-    /*
     if (this.userId) {
-      this._userService.getUser(this.userId).subscribe(
+      this.userDate = moment("1986-12-31", "YYYY-MM-DD").toDate();
+
+
+      this.user = this._userService.getUser(this.userId).pipe(
+        //tap(user => this.formUserInfo.patchValue(user))
+        
+        tap(user => this.formUserInfo.patchValue({
+          "userId":user.userId, 
+          "lastName":user.lastName, 
+          "lastNameMother":"Jasso",
+          "name": user.name,
+          "password":"r00t1234",
+          "user":"raulgj1",
+          "birthdate": this.userDate
+          }))
+      );
+      /*this._userService.getUser(this.userId).subscribe(
         data => {
-          this.createFormUser(data);
+          this.user = data;
+          this.formUserInfo.patchValue({
+            "userId":14,
+            "lastName":"Gomez",
+            "lastNameMother":"Jasso",
+            "name":"Raul Angel",
+            "password":"r00t1234",
+            "user":"raulgj1",
+            });
         },
         error => {
           console.log(error);
         }
-      );
+      );*/
     }
-    else {
-      this.createFormUser(this.user);
+    else{
+      //this.user.
     }
-    */
   }
-
-  private createFormUser(usr : IUser){
-    this.addEditForm = this._formBuilder.group({
-      userId: [usr.userId],
-      user: [usr.user, Validators.required],
-      //password: [usr.password, Validators.required],
-      //name: [usr.name, Validators.required],
-      //lastName: [usr.lastName, Validators.required],
-      //lastNameMother: [usr.lastNameMother, Validators.required], 
-      //birthdate: [usr.birthdate, Validators.required],
-      //gender: [usr.gender, Validators.required],
-      //isActive: [usr.isActive, Validators.required], 
-      //temails: this._formBuilder.array(this.createFormEmail(usr.temails))
-    });
-  }
-
-  createFormEmail(emails: any[]) {
-    return emails.map(email => this._formBuilder.group({
-      emailId: [email.emailId],
-      email: [email.email, Validators.required],
-      isActive: [email.isActive, Validators.required]
-    }));
-  }
-
-
-  getEmailsFor() {
-    return (<FormArray>this.addEditForm.get('temails')).controls
-  }
-
 }
